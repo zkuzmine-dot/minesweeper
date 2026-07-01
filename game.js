@@ -192,7 +192,8 @@ function renderBoard(gameState) {
 }
 
 function handleLeftClick(row, col) {
-  if (gameState.gameOver) return;
+  // по флагу и после конца игры левый клик ничего не делает
+  if (gameState.gameOver || gameState.flags.has(key(row, col))) return;
 
   // первый клик: ставим мины (защищая эту клетку) и запускаем таймер
   if (gameState.startTime === null) {
