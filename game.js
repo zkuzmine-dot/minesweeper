@@ -145,7 +145,7 @@ window.toggleFlag = toggleFlag;
 
 const ROWS = 9;
 const COLS = 9;
-const MINES = 81;
+const MINES = 10;
 
 let gameState = createBoard(ROWS, COLS, MINES);
 let timerInterval = null;
