@@ -41,12 +41,21 @@ function placeMines(gameState, firstRow, firstCol) {
     }
   }
 
-  while (mines.size < mineCount) {
-    const r = Math.floor(Math.random() * rows);
-    const c = Math.floor(Math.random() * cols);
-    const k = key(r, c);
-    if (safe.has(k) || mines.has(k)) continue;
-    mines.add(k);
+  // список клеток, куда мину ставить можно
+  const available = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const k = key(r, c);
+      if (!safe.has(k)) available.push(k);
+    }
+  }
+
+  // не больше, чем есть свободных клеток — иначе на мелком поле цикл завис бы
+  const count = Math.min(mineCount, available.length);
+  for (let i = 0; i < count; i++) {
+    const idx = Math.floor(Math.random() * available.length);
+    mines.add(available[idx]);
+    available.splice(idx, 1);
   }
 
   return gameState;
@@ -133,7 +142,7 @@ window.toggleFlag = toggleFlag;
 
 const ROWS = 9;
 const COLS = 9;
-const MINES = 10;
+const MINES = 81;
 
 let gameState = createBoard(ROWS, COLS, MINES);
 let timerInterval = null;
