@@ -104,6 +104,29 @@ function assert(condition, name) {
   assert(checkWin(state) === true, 'checkWin: true когда открыты все безопасные клетки');
 }
 
+// 11. createBoard ограничивает mineCount: нельзя запросить больше мин, чем влезет
+//     после защиты первого клика и его соседей (rows*cols − 9). Иначе счётчик
+//     оставшихся мин показывал бы неверное число ещё до старта игры.
+{
+  const state = createBoard(9, 9, 200);
+  assert(state.mineCount === 72, 'createBoard: mineCount ограничен максимумом (9×9 − 9 = 72)');
+}
+
+// 12. placeMines ставит ровно mineCount мин даже при клике в центр — там
+//     безопасная зона максимальна (9 клеток), но места под мины всё равно хватает.
+{
+  const state = createBoard(9, 9, 200); // mineCount → 72
+  placeMines(state, 4, 4);
+  assert(state.mines.size === 72, 'placeMines: ставит ровно mineCount мин при клике в центр');
+}
+
+// 13. placeMines на 3×3 не виснет: поле слишком мало, mineCount урезается до 0.
+{
+  const state = createBoard(3, 3, 10);
+  placeMines(state, 1, 1);
+  assert(state.mines.size === 0, 'placeMines: на 3×3 мин нет и нет зависания');
+}
+
 // Итог
 const summary = document.getElementById('summary');
 const summaryText = failed === 0

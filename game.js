@@ -12,6 +12,9 @@ function createBoard(rows, cols, mineCount) {
     board.push(row);
   }
 
+  // не больше мин, чем влезет после защиты первого клика и его соседей (до 9 клеток)
+  mineCount = Math.max(0, Math.min(mineCount, rows * cols - 9));
+
   return {
     rows,
     cols,
